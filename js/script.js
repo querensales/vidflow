@@ -20,7 +20,25 @@ async function buscarEmostrarVideos() {
 
     } catch (error) {
         containerVideos.innerHTML = `<p class="error">Erro ao carregar os vídeos: ${error.message}</p>`;
-        console.error("Erro ao buscar vídeos:", error);
     }
 }
 buscarEmostrarVideos();
+
+const barraDePesquisa = document.querySelector(".pesquisar__input");
+barraDePesquisa.addEventListener("input", filtrarPesquisa);
+
+function filtrarPesquisa() {
+    const termo = barraDePesquisa.value.toLowerCase();
+    const videos = document.querySelectorAll(".videos__item");
+
+    videos.forEach((video) => {
+        const titulo = video.querySelector(".titulo-video").textContent.toLowerCase();
+        const descricao = video.querySelector(".titulo-canal").textContent.toLowerCase();
+
+        if (titulo.includes(termo) || descricao.includes(termo)) {
+            video.style.display = "block";
+        } else {
+            video.style.display = "none";
+        }
+    });
+}
