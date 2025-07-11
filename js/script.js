@@ -31,14 +31,25 @@ function filtrarPesquisa() {
     const termo = barraDePesquisa.value.toLowerCase();
     const videos = document.querySelectorAll(".videos__item");
 
-    videos.forEach((video) => {
+    for (const video of videos) {
         const titulo = video.querySelector(".titulo-video").textContent.toLowerCase();
         const descricao = video.querySelector(".titulo-canal").textContent.toLowerCase();
+        video.style.display = (titulo.includes(termo) || descricao.includes(termo)) ? "block" : "none";
+    }
+}
 
-        if (titulo.includes(termo) || descricao.includes(termo)) {
-            video.style.display = "block";
-        } else {
-            video.style.display = "none";
-        }
+const botaoCategoria = document.querySelectorAll(".superior__item");
+botaoCategoria.forEach((botao) => {
+    botao.addEventListener("click", () => {
+        let nomeCategoria = botao.getAttribute("name").toLowerCase();
+        botao.addEventListener("click", () => filtrarPorCategoria(nomeCategoria));
     });
+});
+
+function filtrarPorCategoria(filtro) {
+    const videos = document.querySelectorAll(".videos__item");
+    for (let video of videos) {
+        const titulo = video.querySelector(".titulo-video").textContent.toLowerCase();
+        video.style.display = titulo.includes(filtro) ? "block" : "none";
+    }
 }
