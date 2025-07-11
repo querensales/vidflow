@@ -13,6 +13,7 @@ async function buscarEmostrarVideos() {
                 <img class="img-canal" src="${video.imagem}" alt="logo do canal">
                 <h3 class="titulo-video">${video.titulo}</h3>
                 <p class="titulo-canal">${video.descricao}</p>
+                <p class="categoria" hidden>${video.categoria}</p>
             </div>
             </li>
         `;
@@ -42,14 +43,21 @@ const botaoCategoria = document.querySelectorAll(".superior__item");
 botaoCategoria.forEach((botao) => {
     botao.addEventListener("click", () => {
         let nomeCategoria = botao.getAttribute("name").toLowerCase();
-        botao.addEventListener("click", () => filtrarPorCategoria(nomeCategoria));
+        filtrarPorCategoria(nomeCategoria);
     });
 });
 
 function filtrarPorCategoria(filtro) {
     const videos = document.querySelectorAll(".videos__item");
     for (let video of videos) {
-        const titulo = video.querySelector(".titulo-video").textContent.toLowerCase();
-        video.style.display = titulo.includes(filtro) ? "block" : "none";
+        let categoria = video.querySelector(".categoria").textContent.toLowerCase();
+
+        if (filtro === "tudo") {
+            video.style.display = "block";
+        } else if (categoria === filtro) {
+            video.style.display = "block";
+        } else {
+            video.style.display = "none";
+        }
     }
 }
