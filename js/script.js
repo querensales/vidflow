@@ -1,8 +1,10 @@
 const containerVideos = document.querySelector(".videos__container");
 
-const api = fetch("http://localhost:3000/videos")
-    .then(res => res.json())
-    .then((videos) =>
+
+async function buscarEmostrarVideos() {
+    try {
+        const busca = await fetch("http://localhost:3000/videos")
+        const videos = await busca.json();
         videos.forEach((video) => {
             containerVideos.innerHTML += `
             <li class="videos__item">
@@ -14,10 +16,29 @@ const api = fetch("http://localhost:3000/videos")
             </div>
             </li>
         `;
-        })
-    )
+        });
 
-    .catch((error) => {
-        console.error("Erro ao carregar os vídeos:", error);
-        containerVideos.innerHTML = "<p>Não foi possível carregar os vídeos.</p>";
+    } catch (error) {
+        containerVideos.innerHTML = `<p class="error">Erro ao carregar os vídeos: ${error.message}</p>`;
+    }
+}
+buscarEmostrarVideos();
+
+const barraDePesquisa = document.querySelector(".pesquisar__input");
+barraDePesquisa.addEventListener("input", filtrarPesquisa);
+
+function filtrarPesquisa() {
+    const termo = barraDePesquisa.value.toLowerCase();
+    const videos = document.querySelectorAll(".videos__item");
+
+    videos.forEach((video) => {
+        const titulo = video.querySelector(".titulo-video").textContent.toLowerCase();
+        const descricao = video.querySelector(".titulo-canal").textContent.toLowerCase();
+
+        if (titulo.includes(termo) || descricao.includes(termo)) {
+            video.style.display = "block";
+        } else {
+            video.style.display = "none";
+        }
     });
+}
